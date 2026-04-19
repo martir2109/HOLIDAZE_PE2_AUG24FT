@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { MessageBanner } from "../shared/MessageBanner";
 import type { MessageType } from "../shared/MessageBanner";
-import { config } from "../../config";
+import { config } from "../../services/config";
 import { useAuthStore } from "../../stores/authStore";
 
 /**

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../shared/Button";
-import { config } from "../../config";
+import { config } from "../../services/config";
 import { InputField } from "../shared/InputField";
 import { Link, useNavigate } from "react-router-dom";
 import { MessageBanner } from "../shared/MessageBanner";
