@@ -29,5 +29,6 @@
   --text-logo: 22px;
 
   /* Breakpoints */
-  --breakpoint-search-filters: 900px;
+  --breakpoint-search-filters: 1000px;
+  --breakpoint-no-account: 400px;
 }
