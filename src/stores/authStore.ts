@@ -24,6 +24,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("apiKey");
+    localStorage.removeItem("favorites");
     set({ user: null, token: null, apiKey: null });
   },
 }));
