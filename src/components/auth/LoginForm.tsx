@@ -50,11 +50,14 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${config.apiBaseUrl}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${config.apiBaseUrl}/auth/login?_holidaze=true`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await response.json();
 
@@ -65,23 +68,22 @@ export default function LoginForm() {
         });
         return;
       }
-      const token = data.data.accessToken;
 
+      const token = data.data.accessToken;
       const apiKey = config.apiKey;
 
       login(
         {
-          id: data.data.id,
           name: data.data.name,
           email: data.data.email,
-          avatar: data.data.avatar ?? null,
-          banner: data.data.banner ?? null,
+          avatar: data.data.avatar ?? { url: "", alt: "" },
+          banner: data.data.banner ?? { url: "", alt: "" },
           venueManager: data.data.venueManager ?? false,
+          _count: { venues: 0, bookings: 0 },
         },
         token,
         apiKey
       );
-
       setAlert({
         type: "success",
         text: "Login successful!",
