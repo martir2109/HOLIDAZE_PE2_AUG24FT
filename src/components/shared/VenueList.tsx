@@ -6,7 +6,7 @@ interface VenueListProps {
 }
 
 /**
- * Dsiplays a list of venues in a responsive grid layout.
+ * Displays a list of venues in a responsive grid layout.
  *
  * @returns A grid of VenueCard components, one for each venue.
  */
