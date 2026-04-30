@@ -1,38 +1,62 @@
 import { useState, useEffect, useRef } from "react";
-import { createBooking } from "../../services/bookingApi";
+import { createBooking, editBooking } from "../../services/bookingApi";
 import type { Venue, Booking } from "../../interfaces/venue";
 import { Button } from "../shared/Button";
 import { DayPicker, type DateRange } from "react-day-picker";
 import { Users, CalendarDays } from "lucide-react";
+import { MessageBanner } from "../shared/MessageBanner";
+import type { MessageType } from "../shared/MessageBanner";
 
 interface BookingFormProps {
   venue: Venue;
   bookings?: Booking[];
+  existingBooking?: Booking;
+  onCancel?: () => void;
 }
 
 /**
- * Form for booking a venue.
+ * Form for booking and editing a venue.
  *
  * Shows a date range picker and a guest count input.
  * Disables already booked dates so the user cannot pick unavailable dates.
  * Validates that the number of guests does not exceed the venue's max guests.
+ * If an existing booking is provided, the form will be pre-filled and save changes on submit.
  *
  * @param venue The venue to book.
  * @param bookings Existing bookings for the venue to disable already booked dates.
+ * When editing, the booking's own dates are excluded from the disabled range.
+ *
+ * @param existingBooking The booking to edit. If not provided, a new booking will be created.
+ * @param onCancel Called when the user clicks cancel while editing a booking.
  */
 export default function BookingForm({
   venue,
   bookings = [],
+  existingBooking,
+  onCancel,
 }: BookingFormProps) {
-  const [bookingError, setBookingError] = useState<string | null>(null);
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-  const [dates, setDates] = useState<DateRange | undefined>(undefined);
-  const [guests, setGuests] = useState<number | "">("");
+  const [alert, setAlert] = useState<{
+    type: MessageType;
+    text: string;
+  } | null>(null);
+  const isEditBooking = !!existingBooking;
+  const [dates, setDates] = useState<DateRange | undefined>(
+    existingBooking
+      ? {
+          from: new Date(existingBooking.dateFrom),
+          to: new Date(existingBooking.dateTo),
+        }
+      : undefined,
+  );
+  const [guests, setGuests] = useState<number | "">(
+    existingBooking ? existingBooking.guests : "",
+  );
   const calendarRef = useRef<HTMLDivElement>(null);
   const isBookingReady = !!dates?.from && !!dates?.to && guests !== "";
   const [showCalendar, setShowCalendar] = useState(false);
 
   const bookedDates = bookings.flatMap((booking) => {
+    if (isEditBooking && booking.id === existingBooking.id) return [];
     const dates = [];
     const current = new Date(booking.dateFrom);
     const end = new Date(booking.dateTo);
@@ -71,27 +95,46 @@ export default function BookingForm({
     if (!dates?.from || !dates?.to || guests === "") return;
 
     if (Number(guests) > venue.maxGuests) {
-      setBookingError(`Max guests for this venue is ${venue.maxGuests}.`);
+      setAlert({
+        type: "error",
+        text: `Max guests for this venue is ${venue.maxGuests}`,
+      });
       return;
     }
 
     try {
-      setBookingError(null);
-      await createBooking({
-        dateFrom: dates.from.toISOString(),
-        dateTo: dates.to.toISOString(),
-        guests: Number(guests),
-        venueId: venue.id,
-      });
-      setBookingSuccess(true);
-      window.location.reload();
+      if (isEditBooking) {
+        await editBooking(existingBooking.id, {
+          dateFrom: dates.from.toISOString(),
+          dateTo: dates.to.toISOString(),
+          guests: Number(guests),
+        });
+      } else {
+        await createBooking({
+          dateFrom: dates.from.toISOString(),
+          dateTo: dates.to.toISOString(),
+          guests: Number(guests),
+          venueId: venue.id,
+        });
+      }
+      setTimeout(() => {
+        setAlert({
+          type: "success",
+          text: isEditBooking ? "Booking updated!" : "Booking confirmed!",
+        });
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       if (error instanceof Error && error.message.includes("409")) {
-        setBookingError(
-          "These dates are already booked. Please choose different dates.",
-        );
+        setAlert({
+          type: "error",
+          text: "These dates are already booked. Please choose different dates.",
+        });
       } else {
-        setBookingError("Something went wrong. Please try again.");
+        setAlert({
+          type: "error",
+          text: "Something went wrong. Please try again.",
+        });
       }
     }
   }
@@ -102,6 +145,9 @@ export default function BookingForm({
         className={`flex flex-col gap-4 border-[0.5px] border-medium-dark-grey rounded-[10px] p-4 ${showCalendar ? "pb-96" : ""}`}
       >
         <h5 className="text-h5 font-bold">Check availability</h5>
+        {alert && (
+          <MessageBanner messageType={alert.type} message={alert.text} />
+        )}
 
         {/* Date range */}
         <div
@@ -152,11 +198,20 @@ export default function BookingForm({
           disabled={!isBookingReady}
           onClick={handleBooking}
         >
-          Book now
+          {isEditBooking ? "Save changes" : "Book now"}
         </Button>
 
-        {bookingSuccess && <p className="text-green-600">Booking confirmed!</p>}
-        {bookingError && <p className="text-red-600">{bookingError}</p>}
+        {isEditBooking && onCancel && (
+          <div className="w-full flex items-center justify-center">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="cursor-pointer text-normal-text hover:underline text-secondary hover:text-primary text-left"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
