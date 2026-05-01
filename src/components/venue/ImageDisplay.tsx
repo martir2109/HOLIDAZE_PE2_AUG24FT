@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Venue } from "../../interfaces/venue";
 import { useFavorites } from "../../hooks/useFavorites";
 import { Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { useAuthStore } from "../../stores/authStore";
 
 interface ImageDisplayProps {
   venue: Venue;
@@ -19,6 +20,8 @@ interface ImageDisplayProps {
 export default function ImageDisplay({ venue }: ImageDisplayProps) {
   const [currentImage, setCurrentImage] = useState(0);
   const { isFavorited, toggleFavorite } = useFavorites();
+  const { user } = useAuthStore();
+  const isLoggedIn = !!user;
 
   return (
     <>
@@ -75,21 +78,23 @@ export default function ImageDisplay({ venue }: ImageDisplayProps) {
           </div>
         )}
 
-        <div
-          className="absolute bg-light-grey rounded-full p-1 top-2 right-2 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            toggleFavorite(venue.id);
-          }}
-        >
-          <Heart
-            className={
-              isFavorited(venue.id)
-                ? "text-red-600 fill-red-600"
-                : "text-dark-grey"
-            }
-          />
-        </div>
+        {isLoggedIn && (
+          <div
+            className="absolute bg-light-grey rounded-full p-1 top-2 right-2 cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              toggleFavorite(venue.id);
+            }}
+          >
+            <Heart
+              className={
+                isFavorited(venue.id)
+                  ? "text-red-600 fill-red-600"
+                  : "text-dark-grey"
+              }
+            />
+          </div>
+        )}
       </div>
     </>
   );
