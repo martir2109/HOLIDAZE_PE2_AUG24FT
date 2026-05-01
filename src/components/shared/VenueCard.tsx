@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import type { Venue } from "../../interfaces/venue";
 import { Heart, MapPin } from "lucide-react";
 import { useFavorites } from "../../hooks/useFavorites";
+import { useAuthStore } from "../../stores/authStore";
 
 interface VenueCardProps {
   venue: Venue;
@@ -17,6 +18,8 @@ interface VenueCardProps {
  */
 export default function VenueCard({ venue }: VenueCardProps) {
   const { isFavorited, toggleFavorite } = useFavorites();
+  const { user } = useAuthStore();
+  const isLoggedIn = !!user;
 
   return (
     <>
@@ -32,22 +35,23 @@ export default function VenueCard({ venue }: VenueCardProps) {
               loading="lazy"
               className="object-cover w-full h-full"
             />
-
-            <div
-              className="absolute bg-light-grey rounded-full p-1 top-2 right-2 cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleFavorite(venue.id);
-              }}
-            >
-              <Heart
-                className={
-                  isFavorited(venue.id)
-                    ? "text-red-600 fill-red-600"
-                    : "text-dark-grey"
-                }
-              />
-            </div>
+            {isLoggedIn && (
+              <div
+                className="absolute bg-light-grey rounded-full p-1 top-2 right-2 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavorite(venue.id);
+                }}
+              >
+                <Heart
+                  className={
+                    isFavorited(venue.id)
+                      ? "text-red-600 fill-red-600"
+                      : "text-dark-grey"
+                  }
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-3 py-4 px-2">
