@@ -22,6 +22,7 @@ export function useFavorites() {
       localStorage.setItem("favorites", JSON.stringify(updated));
       return updated;
     });
+    window.location.reload();
   }
 
   function isFavorited(venueId: string) {
