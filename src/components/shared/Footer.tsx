@@ -2,12 +2,13 @@ import { Mail, MapPin, MoveRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
 /**
+ * Footer component
  *
  * @returns A responsive footer with three columns: Contact Info, Explore, and Policies.
  */
 export default function Footer() {
   return (
-    <footer className="w-full bg-white h-fit md:h-97 border-t border-[0.2px] border-medium-dark-grey py-10 px-4 sm:px-6 flex flex-col items-center break-all sm:break-normal">
+    <footer className="w-full bg-white h-fit md:h-97 border-t border-[0.2px] border-medium-dark-grey gap-10 py-10 px-4 sm:px-6 flex flex-col items-center break-all sm:break-normal">
       <div className="max-w-272.75 w-full h-full flex items-center">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 justify-between w-full">
           <div className="flex flex-col gap-2 sm:items-center items-start">
@@ -63,7 +64,7 @@ export default function Footer() {
                   <MoveRight /> Terms and conditions
                 </Link>
                 <Link
-                  to="/termsandconditions"
+                  to="/privacypolicy"
                   className="font-medium flex gap-2 text-secondary hover:underline"
                 >
                   <MoveRight /> Privacy policy
