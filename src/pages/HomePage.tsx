@@ -7,6 +7,7 @@ import VenueFilters from "../components/shared/VenueFilters";
 import type { DateRange } from "react-day-picker";
 import { useVenueFilters } from "../hooks/useVenueFilters";
 import { SearchX } from "lucide-react";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 
 const VENUES_PER_PAGE = 12;
 
@@ -53,7 +54,7 @@ export default function HomePage() {
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredVenues.length / VENUES_PER_PAGE)
+    Math.ceil(filteredVenues.length / VENUES_PER_PAGE),
   );
 
   const paginatedVenues = useMemo(() => {
@@ -61,12 +62,7 @@ export default function HomePage() {
     return filteredVenues.slice(startIndex, startIndex + VENUES_PER_PAGE);
   }, [filteredVenues, currentPage]);
 
-  if (loading)
-    return (
-      <div className="flex pb-10 text-secondary h-screen w-full items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
+  if (loading) return <LoadingSpinner />;
 
   if (error) {
     return (
