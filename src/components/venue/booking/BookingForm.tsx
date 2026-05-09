@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { createBooking, editBooking } from "../../services/bookingApi";
-import type { Venue, Booking } from "../../interfaces/venue";
-import { Button } from "../shared/Button";
+import { createBooking, editBooking } from "../../../services/bookingApi";
+import type { Venue, Booking } from "../../../interfaces/venue";
+import { Button } from "../../shared/Button";
 import { DayPicker, type DateRange } from "react-day-picker";
 import { Users, CalendarDays } from "lucide-react";
-import { MessageBanner } from "../shared/MessageBanner";
-import type { MessageType } from "../shared/MessageBanner";
+import { MessageBanner } from "../../shared/MessageBanner";
+import type { MessageType } from "../../shared/MessageBanner";
 
 interface BookingFormProps {
   venue: Venue;
@@ -190,6 +190,9 @@ export default function BookingForm({
             className="outline-none bg-transparent w-full"
           />
         </div>
+        <p className="text-dark-grey text-small-text">
+          Select booking dates and number of guests
+        </p>
 
         <Button
           className={`w-full transition-opacity ${
