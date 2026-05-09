@@ -47,7 +47,7 @@ export default function ImageDisplay({ venue }: ImageDisplayProps) {
                     (prev - 1 + venue.media.length) % venue.media.length,
                 )
               }
-              className="bg-white/80 rounded-full p-1 cursor-pointer"
+              className="bg-white/80 rounded-full p-1 cursor-pointer border-[0.5px] border-gray-200 hover:bg-orange-100"
             >
               <ChevronLeft />
             </button>
@@ -57,7 +57,7 @@ export default function ImageDisplay({ venue }: ImageDisplayProps) {
               onClick={() =>
                 setCurrentImage((prev) => (prev + 1) % venue.media.length)
               }
-              className="bg-white/80 rounded-full p-1 cursor-pointer"
+              className="bg-white/80 rounded-full p-1 cursor-pointer border-[0.5px] border-gray-200 hover:bg-orange-100"
             >
               <ChevronRight />
             </button>
@@ -72,7 +72,7 @@ export default function ImageDisplay({ venue }: ImageDisplayProps) {
                 title="Go to image"
                 key={i}
                 onClick={() => setCurrentImage(i)}
-                className={`w-3 h-3 rounded-full ${i === currentImage ? "bg-white" : "bg-white/50"}`}
+                className={`w-3 h-3 hover:w-4 hover:h-4 rounded-full cursor-pointer border-[0.5] border-gray-100 hover:bg-orange-200 ${i === currentImage ? "bg-white" : "bg-white/50"}`}
               />
             ))}
           </div>
