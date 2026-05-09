@@ -25,7 +25,7 @@ export default function ImageDisplay({ venue }: ImageDisplayProps) {
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-t-md">
+      <div className="relative overflow-hidden rounded-t-md h-80 sm:h-100 md:h-125 lg:h-150">
         <img
           src={
             venue.media[currentImage]?.url ||
