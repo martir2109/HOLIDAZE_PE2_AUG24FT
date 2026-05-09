@@ -14,7 +14,7 @@ export default function MapDisplay({ venue }: MapDisplayProps) {
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h4 className="text-h5 font-bold">Map</h4>
+        <h2 className="text-h5 font-bold">Map</h2>
         <iframe
           title="Venue location"
           width="100%"

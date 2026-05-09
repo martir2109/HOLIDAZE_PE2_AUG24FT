@@ -38,7 +38,7 @@ export default function DisplayBookings({ bookings, onEdit }: Props) {
 
   return (
     <div className="flex flex-col gap-3 border-[0.5px] border-medium-dark-grey rounded-[10px] p-4">
-      <h5 className="text-h5 font-bold">Your bookings here</h5>
+      <h2 className="text-h5 font-bold">Your bookings here</h2>
       {bookings.map((booking) => (
         <div
           key={booking.id}
