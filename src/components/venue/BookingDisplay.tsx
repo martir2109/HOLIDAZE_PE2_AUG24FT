@@ -2,9 +2,9 @@ import { useState } from "react";
 import type { Booking } from "../../interfaces/venue";
 import { deleteBooking } from "../../services/bookingApi";
 import { Pen, Trash2 } from "lucide-react";
-import ConfrimDeleteCard from "../booking/ConfirmDeleteCard";
+import ConfrimDeleteCard from "./ConfirmDeleteCard";
 
-interface Props {
+interface BookingDisplayProps {
   bookings: Booking[];
   onEdit: (booking: Booking) => void;
 }
@@ -17,7 +17,10 @@ interface Props {
  * @param onEdit called when the user clicks the edit button on a booking.
  * @returns A list of bookings with edit and delete buttons.
  */
-export default function DisplayBookings({ bookings, onEdit }: Props) {
+export default function DisplayBookings({
+  bookings,
+  onEdit,
+}: BookingDisplayProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
