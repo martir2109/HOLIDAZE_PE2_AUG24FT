@@ -28,6 +28,11 @@ export interface Venue {
     lng: number;
   };
   bookings?: Booking[];
+  owner?: {
+    name: string;
+    email: string;
+    avatar?: { url: string; alt: string };
+  };
 }
 
 export interface Booking {
@@ -38,6 +43,9 @@ export interface Booking {
   created: string;
   updated: string;
   venue?: Venue;
+  customer?: {
+    name: string;
+  };
 }
 
 export interface ApiResponse {
