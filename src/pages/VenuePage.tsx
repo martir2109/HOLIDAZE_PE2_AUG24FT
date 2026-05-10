@@ -5,24 +5,30 @@ import { Link, useParams } from "react-router-dom";
 import { MoveLeft, MapPin, Users } from "lucide-react";
 import { useAuthStore } from "../stores/authStore";
 import "react-day-picker/style.css";
-import BookingForm from "../components/booking/BookingForm";
+import BookingForm from "../components/venue/booking/BookingForm";
 import NotLoggedIn from "../components/venue/NotLoggedIn";
 import ImageDisplay from "../components/venue/ImageDisplay";
 import LoadingSpinner from "../components/shared/LoadingSpinner";
 import AmenitiesDisplay from "../components/venue/AmenitiesDisplay";
 import DisplayBookings from "../components/venue/BookingDisplay";
 import MapDisplay from "../components/venue/MapDisplay";
+import RatingDisplay from "../components/venue/RatingDisplay";
 
 /**
  * Single venue page
  *
  * Displays a single venue with its details:
  * - Images (if there is more than one image, arrow buttons will show)
+ * - Name of the venue
+ * - Venue description
+ * - Rating
  * - Amenities (if there are no amenities, a message will show)
  * - Location (if the venue has location address and city a google map with iframe will show)
  * - Booking form (only visible to logged in users and non-owners)
+ * - Edit button (only visible to the venue owner)
  * - The user's existing bookings with options to edit or delete (if they have any bookings on the venue)
  * - A message asking the user to log in if they are not logged in
+ * - Name of the owner for the venue.
  *
  * Fetches the venue by ID from the URL, and lets logged-in users pick dates and guests to book.
  *
@@ -102,13 +108,13 @@ export default function VenuePage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <AmenitiesDisplay venue={venue} />
-            </div>
-
-            <div className="flex flex-col gap-2">
               <h3 className="text-h5 font-bold">About this venue</h3>
               <p>{venue.description}</p>
             </div>
+
+            <RatingDisplay venue={venue} />
+
+            <AmenitiesDisplay venue={venue} />
 
             <div className="flex flex-col gap-2">
               <h4 className="text-h5 font-bold">Address</h4>
@@ -118,15 +124,13 @@ export default function VenuePage() {
               </p>
             </div>
 
-            {(venue.location.address || venue.location.city) && (
-              <MapDisplay venue={venue} />
-            )}
+            <MapDisplay venue={venue} />
 
             {!isLoggedIn ? (
               <NotLoggedIn />
             ) : isOwner ? (
               <div className="flex flex-col gap-4 border-[0.5px] border-medium-dark-grey rounded-[10px] p-4">
-                <p className="text-dark-grey">
+                <p className="text-dark-grey text-center">
                   You cannot book your own venue.
                 </p>
               </div>
@@ -149,6 +153,11 @@ export default function VenuePage() {
               </div>
             )}
           </div>
+        </div>
+        <div>
+          <p className="text-dark-grey text-small-text">
+            Venue owner: {venue.owner.name}
+          </p>
         </div>
       </div>
     </main>
