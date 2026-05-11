@@ -6,7 +6,7 @@ interface RatingDisplayProps {
 }
 
 /**
- * Displays the rating for the venue as stars and a scor out of 5.
+ * Displays the rating for the venue as stars and a score out of 5.
  * Displays filled stars based on the rating, rounded to the nearest whole number.
  * If the venue has no rating, a message is shown instead.
  *
@@ -25,7 +25,7 @@ export default function RatingDisplay({ venue }: RatingDisplayProps) {
               size={24}
               strokeWidth={0}
               fill={
-                index + 1 <= Math.floor(venue.rating) ? "#facc15" : "#d1d5db"
+                index + 1 <= Math.round(venue.rating) ? "#facc15" : "#d1d5db"
               }
             />
           ))}
