@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import VenueCard from "../shared/VenueCard";
 import { useFavorites } from "../../hooks/useFavorites";
 import type { Venue } from "../../interfaces/venue";
+import { createVenue } from "../../services/venueApi";
+import VenueForm from "../venue/createandedit/VenueForm";
 import EditProfileCard from "./editProfileCard";
 
 interface UserCardProps {
@@ -20,8 +22,9 @@ interface UserCardProps {
  * - Your venues: the venues the user manages (this is only visible for venue managers).
  * - Your favorites: the venues the user has saved as favorites (this is visible for all logged in users).
  *
+ * Venue managers can open a popup form to create a new venue.
  * All users can open a popup form to edit their profile (avatar and banner).
- * Both form are displayed as popups and disable page scrolling while open.
+ * Both forms are displayed as popups and disable page scrolling while open.
  *
  * @returns The profile card or null if no user is provided.
  */
@@ -31,8 +34,20 @@ export default function ProfileCard({ user, venues }: UserCardProps) {
   >("bookings");
   const { favorites } = useFavorites();
   const favoriteVenues = venues.filter((venue) => favorites.includes(venue.id));
+  const [showVenueForm, setShowVenueForm] = useState(false);
   const [showEditProfileForm, setShowEditProfileForm] = useState(false);
   const isVenueManager = user?.venueManager ?? false;
+
+  useEffect(() => {
+    if (showVenueForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showVenueForm]);
 
   useEffect(() => {
     if (showEditProfileForm) {
@@ -49,7 +64,7 @@ export default function ProfileCard({ user, venues }: UserCardProps) {
 
   return (
     <>
-      <section className="w-full max-w-286.5 bg-white p-3 sm:p-6 min-h-screen flex flex-col gap-4">
+      <section className="w-full max-w-286.5 bg-white p-6 min-h-screen flex flex-col gap-4">
         <div className="w-full md:min-h-110 min-h-100">
           <div className="relative">
             <img
@@ -87,6 +102,7 @@ export default function ProfileCard({ user, venues }: UserCardProps) {
                       type="button"
                       variant="newVenue"
                       className="w-fit mt-4"
+                      onClick={() => setShowVenueForm(true)}
                     >
                       New venue
                     </Button>
@@ -156,6 +172,14 @@ export default function ProfileCard({ user, venues }: UserCardProps) {
           </div>
         </div>
       </section>
+      {showVenueForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-2">
+          <VenueForm
+            onClose={() => setShowVenueForm(false)}
+            onSubmit={(values) => createVenue(values)}
+          />
+        </div>
+      )}
 
       {showEditProfileForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-2">
