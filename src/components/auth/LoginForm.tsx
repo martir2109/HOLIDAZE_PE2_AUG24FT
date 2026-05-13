@@ -37,8 +37,7 @@ export default function LoginForm() {
     setAlert(null);
 
     if (!email.trim() || !password.trim()) {
-      setAlert({ type: "error", text: "Email and password are required" });
-
+      setAlert({ type: "error", text: "Email and password are required." });
       return;
     }
 
@@ -56,7 +55,7 @@ export default function LoginForm() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -82,7 +81,7 @@ export default function LoginForm() {
           _count: { venues: 0, bookings: 0 },
         },
         token,
-        apiKey
+        apiKey,
       );
       setAlert({
         type: "success",
