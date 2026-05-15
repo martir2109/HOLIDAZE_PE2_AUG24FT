@@ -1,6 +1,13 @@
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** The visual style variant of the button. @default 'primary' */
-  variant?: "primary" | "secondary" | "profile" | "clear" | "newVenue";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "profile"
+    | "clear"
+    | "newVenue"
+    | "clearRating"
+    | "deleteVenue";
 }
 
 /**
@@ -26,6 +33,10 @@ export function Button({
       "bg-grey-200 rounded-[4px] text-dark-grey border border-dark-grey hover:bg-light-grey hover:border-light-grey hover:text-gray-500",
     newVenue:
       "bg-primary text-white font-bold px-4 rounded-[4px] hover:bg-gray-300 hover:text-gray-500",
+    clearRating:
+      "bg-grey-200 text-normal-text rounded-[4px] px-4 py-0 text-dark-grey border border-dark-grey hover:bg-light-grey hover:border-light-grey hover:text-gray-500",
+    deleteVenue:
+      "bg-red-500 text-normal-text text-white px-4 rounded-[4px] hover:bg-gray-200 hover:text-gray-800",
   };
 
   return (
