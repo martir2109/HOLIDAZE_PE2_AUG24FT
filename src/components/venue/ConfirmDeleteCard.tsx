@@ -3,15 +3,18 @@ interface DeleteModalProps {
   onCancel: () => void;
   isDeleting: boolean;
   error: string | null;
+  type?: "booking" | "venue";
 }
 
 /**
- * A popup that asks the user to confirm before deleting a booking.
+ * A popup that asks the user to confirm before deleting a booking or venue.
+ * The title and message change based on the type.
  *
  * @param onConfirm Called when the user clicks "Yes, delete".
  * @param onCancel Called when the user clicks Cancel.
  * @param isDeleting When true, the confirm button shows "Deleting..." and is disabled.
  * @param error An error message to show if the delete fails, or null if there is no error.
+ * @param type Whether the user is deleting a "booking" or a "venue". Defaults to "booking".
  * @returns An overlay with a confirmation card.
  */
 export default function ConfrimDeleteCard({
@@ -19,14 +22,15 @@ export default function ConfrimDeleteCard({
   onCancel,
   isDeleting,
   error,
+  type = "booking",
 }: DeleteModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40" />
       <div className="relative bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4 flex flex-col gap-4">
-        <h2 className="text-lg font-bold">Delete booking</h2>
+        <h2 className="text-lg font-bold">Delete {type}</h2>
         <p className="text-sm text-gray-600">
-          Are you sure you want to delete this booking? This cannot be undone
+          Are you sure you want to delete this {type}? This cannot be undone
           once deleted.
         </p>
         {error && <p className="text-sm text-red-600">{error}</p>}
