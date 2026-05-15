@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { getVenue } from "../services/venueApi";
+import { getVenue, editVenue, deleteVenue } from "../services/venueApi";
 import type { Venue, Booking } from "../interfaces/venue";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { MoveLeft, MapPin, Users } from "lucide-react";
+import { Button } from "../components/shared/Button";
 import { useAuthStore } from "../stores/authStore";
 import "react-day-picker/style.css";
+import VenueForm from "../components/venue/createandedit/VenueForm";
 import BookingForm from "../components/venue/booking/BookingForm";
 import NotLoggedIn from "../components/venue/NotLoggedIn";
 import ImageDisplay from "../components/venue/ImageDisplay";
@@ -13,6 +15,7 @@ import AmenitiesDisplay from "../components/venue/AmenitiesDisplay";
 import DisplayBookings from "../components/venue/BookingDisplay";
 import MapDisplay from "../components/venue/MapDisplay";
 import RatingDisplay from "../components/venue/RatingDisplay";
+import ConfirmDeleteCard from "../components/venue/ConfirmDeleteCard";
 
 /**
  * Single venue page
@@ -31,6 +34,7 @@ import RatingDisplay from "../components/venue/RatingDisplay";
  * - Name of the owner for the venue.
  *
  * Fetches the venue by ID from the URL, and lets logged-in users pick dates and guests to book.
+ * Venue owners can edit or delete their venue. On successful delete, the user is redirected to their profile page.
  *
  * @returns The venue page
  */
@@ -41,7 +45,12 @@ export default function VenuePage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuthStore();
   const isLoggedIn = !!user;
+  const [showForm, setShowForm] = useState(false);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchVenue() {
@@ -56,6 +65,29 @@ export default function VenuePage() {
     }
     fetchVenue();
   }, [id]);
+
+  useEffect(() => {
+    if (showForm) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showForm]);
+
+  async function handleDeleteVenue(venueId: string) {
+    try {
+      setDeletingId(venueId);
+      await deleteVenue(venueId);
+      navigate("/profile");
+    } catch {
+      setDeleteError("Failed to delete venue. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   if (loading) return <LoadingSpinner />;
 
@@ -78,13 +110,18 @@ export default function VenuePage() {
   return (
     <main className="w-full min-h-screen flex justify-center">
       <div className="bg-white min-h-screen max-w-286.5 w-full p-4 flex flex-col gap-6">
-        <div className="mt-2">
-          <Link
-            to="/"
-            className="flex items-center cursor-pointer hover:underline gap-2"
-          >
-            <MoveLeft /> Back to venues
-          </Link>
+        <div className="mt-2 gap-4 flex flex-col sm:flex-row justify-between">
+          <div>
+            <Link
+              to="/"
+              className="flex items-center cursor-pointer hover:underline gap-2"
+            >
+              <MoveLeft /> Back to venues
+            </Link>
+          </div>
+          {isOwner && (
+            <Button onClick={() => setShowForm(true)}>Edit venue</Button>
+          )}
         </div>
 
         <div className="h-fit w-full flex flex-col gap-2">
@@ -160,6 +197,30 @@ export default function VenuePage() {
           </p>
         </div>
       </div>
+      {showForm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-2">
+          <VenueForm
+            mode="edit"
+            initialValues={venue}
+            onClose={() => setShowForm(false)}
+            onSubmit={(values) => editVenue(venue.id, values)}
+            onDelete={() => setConfirmDeleteId(venue.id)}
+          />
+        </div>
+      )}
+
+      {confirmDeleteId && (
+        <ConfirmDeleteCard
+          type="venue"
+          onConfirm={() => handleDeleteVenue(confirmDeleteId)}
+          onCancel={() => {
+            setConfirmDeleteId(null);
+            setDeleteError(null);
+          }}
+          isDeleting={deletingId === confirmDeleteId}
+          error={deleteError}
+        />
+      )}
     </main>
   );
 }
