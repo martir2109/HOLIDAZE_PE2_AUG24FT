@@ -15,14 +15,14 @@ interface AmenitiesDisplayProps {
  */
 export default function AmenitiesDisplay({ venue }: AmenitiesDisplayProps) {
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <h2 className="text-h5 font-bold">Amenities</h2>
       <div className="flex gap-4 flex-wrap">
         {!venue.meta.wifi &&
         !venue.meta.parking &&
         !venue.meta.breakfast &&
         !venue.meta.pets ? (
-          <p>No amenities</p>
+          <p className="text-dark-grey">This venue has no amenities</p>
         ) : (
           <>
             {venue.meta.wifi && (
@@ -48,6 +48,6 @@ export default function AmenitiesDisplay({ venue }: AmenitiesDisplayProps) {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
