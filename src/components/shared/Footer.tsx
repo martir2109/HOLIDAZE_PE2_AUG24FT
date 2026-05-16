@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 justify-between w-full">
           <div className="flex flex-col gap-2 sm:items-center items-start">
             <div className="text-left">
-              <h5 className="font-bold">Contact Info</h5>
+              <p className="font-bold">Contact Info</p>
               <div className="flex flex-col gap-2">
                 <p className="flex items-center gap-2">
                   <Phone size={20} /> +47 123 456 78
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-col gap-2 items-start sm:items-center">
             <div className="text-left">
-              <h5 className="font-bold">Explore</h5>
+              <p className="font-bold">Explore</p>
               <div className="flex flex-col gap-2">
                 <Link
                   to="/aboutus"
@@ -55,7 +55,7 @@ export default function Footer() {
 
           <div className="flex flex-col gap-2 sm:items-center items-start">
             <div className="text-left">
-              <h5 className="font-bold">Policies</h5>
+              <p className="font-bold">Policies</p>
               <div className="flex flex-col gap-2">
                 <Link
                   to="/termsandconditions"
