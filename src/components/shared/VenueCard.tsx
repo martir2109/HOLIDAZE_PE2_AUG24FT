@@ -62,7 +62,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
               </p>
             </div>
             <div>
-              <h5 className="text-h5 font-bold truncate">{venue.name}</h5>
+              <p className="text-h5 font-bold truncate">{venue.name}</p>
             </div>
             <div className="flex items-center gap-1 text-medium-text">
               <p className="font-bold">{venue.price} nok</p>
