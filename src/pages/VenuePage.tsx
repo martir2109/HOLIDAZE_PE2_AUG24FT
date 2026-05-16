@@ -30,6 +30,7 @@ import ConfirmDeleteCard from "../components/venue/ConfirmDeleteCard";
  * - Booking form (only visible to logged in users and non-owners)
  * - Edit button (only visible to the venue owner)
  * - The user's existing bookings with options to edit or delete (if they have any bookings on the venue)
+ * - Venue owners can view all bookings for their venue.
  * - A message asking the user to log in if they are not logged in
  * - Name of the owner for the venue.
  *
@@ -166,10 +167,32 @@ export default function VenuePage() {
             {!isLoggedIn ? (
               <NotLoggedIn />
             ) : isOwner ? (
-              <div className="flex flex-col gap-4 border-[0.5px] border-medium-dark-grey rounded-[10px] p-4">
-                <p className="text-dark-grey text-center">
-                  You cannot book your own venue.
-                </p>
+              <div className="flex flex-col gap-4">
+                <h3 className="text-h5 font-bold">Bookings for this venue</h3>
+                {venue.bookings && venue.bookings.length > 0 ? (
+                  venue.bookings.map((booking) => (
+                    <div
+                      key={booking.id}
+                      className="border-[0.5px] border-medium-dark-grey rounded-[10px] p-4 flex flex-col gap-2"
+                    >
+                      <p className="font-semibold">
+                        {booking.customer?.name ?? "Unknown"}
+                      </p>
+                      <div className="flex gap-2">
+                        <p className="text-sm text-dark-grey">
+                          {new Date(booking.dateFrom).toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-dark-grey">to</p>
+                        <p className="text-sm text-dark-grey">
+                          {new Date(booking.dateTo).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p className="text-sm">Total guests: {booking.guests}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-dark-grey text-center">No bookings yet.</p>
+                )}
               </div>
             ) : (
               <div className="flex flex-col gap-6">
@@ -193,7 +216,7 @@ export default function VenuePage() {
         </div>
         <div>
           <p className="text-dark-grey text-small-text">
-            Venue owner: {venue.owner.name}
+            Venue owner: {venue.owner?.name ?? "Unknown"}
           </p>
         </div>
       </div>
