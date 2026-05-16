@@ -55,9 +55,9 @@ export default function VenueCard({ venue }: VenueCardProps) {
           </div>
 
           <div className="flex flex-col gap-3 py-4 px-2">
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               <MapPin />
-              <p className="text-normal-text text-dark-grey">
+              <p className="text-normal-text text-gray-800">
                 {venue.location.city}, {venue.location.country}
               </p>
             </div>
@@ -66,7 +66,7 @@ export default function VenueCard({ venue }: VenueCardProps) {
             </div>
             <div className="flex items-center gap-1 text-medium-text">
               <p className="font-bold">{venue.price} nok</p>
-              <p className="text-dark-grey">/night</p>
+              <p className="text-gray-700">/night</p>
             </div>
           </div>
         </div>
