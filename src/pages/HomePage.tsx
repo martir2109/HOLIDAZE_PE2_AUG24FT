@@ -80,6 +80,8 @@ export default function HomePage() {
           alt="Holidaze banner"
           className="w-full h-full object-cover object-center"
           title="Photo by Manuel Inglez"
+          fetchPriority="high"
+          loading="eager"
         />
 
         <h1 className="absolute inset-0 flex items-center justify-center text-white  text-h3 sm:text-h1 font-bold">
@@ -112,7 +114,12 @@ export default function HomePage() {
             </p>
           </div>
         ) : (
-          <VenueList venues={paginatedVenues} />
+          <div>
+            <h2 className="text-large-text font-bold mb-6">
+              Find and Book Unique Venues
+            </h2>
+            <VenueList venues={paginatedVenues} />
+          </div>
         )}
         <div className="w-full flex justify-center items-center">
           {totalPages > 1 && (
