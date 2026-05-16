@@ -74,7 +74,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <p className="w-full text-center mt-10 sm:mt-auto text-small-text text-dark-grey">
+      <p className="w-full text-center mt-10 sm:mt-auto text-small-text text-gray-700">
         &copy; {new Date().getFullYear()} Holidaze. All rights reserved.
       </p>
     </footer>
