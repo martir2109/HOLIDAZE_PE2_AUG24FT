@@ -76,7 +76,7 @@ export default function HomePage() {
     <main className="w-full pb-10">
       <div className="relative w-full h-88.75">
         <img
-          src="/src/assets/banner.jpg"
+          src="/public/banner.jpg"
           alt="Holidaze banner"
           className="w-full h-full object-cover object-center"
           title="Photo by Manuel Inglez"
