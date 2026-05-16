@@ -14,7 +14,7 @@ import LoadingSpinner from "../components/shared/LoadingSpinner";
  */
 export default function ProfilePage() {
   const name = useAuthStore((state) => state.user?.name);
-  const [user, setUser] = useState<User | null>(null);
+  const [, setUser] = useState<User | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
